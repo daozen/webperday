@@ -1,0 +1,11 @@
+/*Basic style for blackground and crosshair cursor*/
+body {
+    background: #000;
+    margin: 0;
+}
+
+canvas {
+    cursor: crosshair;
+    display: block;
+}
+
