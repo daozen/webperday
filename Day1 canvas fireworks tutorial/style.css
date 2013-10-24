@@ -1,11 +1,35 @@
 /*Basic style for blackground and crosshair cursor*/
 body {
-    background: #000;
+    background: #323232;
     margin: 0;
 }
 
 canvas {
     cursor: crosshair;
     display: block;
+}
+
+.link {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #9fd9ec;
+    border: 1px dashed #eeeeee;
+}
+
+.link a {
+    text-decoration: none;
+    color: #f6f6f6;
+    margin: auto;
+    display: block;
+    transition: all 0.2s;
+}
+
+.link a:hover{
+    background-color: #81d05c;
 }
 

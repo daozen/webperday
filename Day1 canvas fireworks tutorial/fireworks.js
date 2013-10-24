@@ -26,7 +26,7 @@ var canvas = document.getElementById("canvas"),
     hue = 120,
     limiterTotal = 5,
     limitterTick = 0,
-    timerTotal = 80,
+    timerTotal = 20,
     timerTick = 0,
     mousedown = false,
     mx,
@@ -56,7 +56,7 @@ function Firework(sx,sy,tx,ty) {
     this.distanceTraveled = 0;
     this.coordinates =[];
     this.coordinatesCount = 3;
-
+    this.hue = Math.random()*360;
     while(this.coordinatesCount--){
         this.coordinates.push([this.x,this.y]);
     }
@@ -80,13 +80,14 @@ Firework.prototype.update = function (index) {
 
     this.speed *= this.acceleration;
 
+
     var vx = Math.cos(this.angle) * this.speed,
         vy = Math.sin(this.angle) * this.speed;
 
     this.distanceTraveled = calculateDistance(this.sx, this.sy, this.x + vx, this.y + vy);
 
     if (this.distanceTraveled >= this.distanceToTarget) {
-        createParticles(this.tx,this.ty);
+        createParticles(this.tx,this.ty,this.hue);
         fireworks.splice(index, 1);
     } else {
         this.x += vx;
@@ -98,7 +99,7 @@ Firework.prototype.draw = function () {
     ctx.beginPath();
     ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
     ctx.lineTo(this.x, this.y);
-    ctx.strokeStyle = 'hsl(' + hue + ',100%,' + this.brightness + '%)';
+    ctx.strokeStyle = 'hsl(' + this.hue + ',100%,' + this.brightness + '%)';
     ctx.stroke();
 
     ctx.beginPath();
@@ -106,7 +107,7 @@ Firework.prototype.draw = function () {
     ctx.stroke();
 };
 
-function Particle(x,y){
+function Particle(x,y,hues){
     this.x = x;
     this.y = y;
     this.coordinates = [];
@@ -119,7 +120,7 @@ function Particle(x,y){
     this.speed = random(1,10);
     this.friction = 0.95;
     this.gravity = 1;
-    this.hue = random(hue-20,hue+20);
+    this.hue = hues;
     this.brightness = random(50,80);
     this.alpha = 1;
     this.decay = random(0.015,0.03);
@@ -145,16 +146,16 @@ Particle.prototype.draw = function(){
     ctx.stroke();
 };
 
-function createParticles(x,y){
+function createParticles(x,y,hues){
     var particleCount = 30;
     while(particleCount--) {
-        particles.push(new Particle(x,y));
+        particles.push(new Particle(x,y,hues));
     }
 }
 
 function loop(){
     requestAnimFrame(loop);
-    hue += 0.5;
+
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
@@ -175,7 +176,7 @@ function loop(){
 
     if(timerTick >= timerTotal){
         if(!mousedown){
-            fireworks.push(new Firework(random(0,cw/2),ch,random(0,cw),random(0,ch/2)));
+            fireworks.push(new Firework(random(0,cw),ch,random(0,cw),random(0,ch/2)));
             timerTick = 0;
         }
     } else {
